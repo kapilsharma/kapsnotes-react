@@ -1,7 +1,7 @@
 # React docs - Quick Start
 
 > **Quick Links**: 
-> [Table of contents](../contents.md) | [Previous: Installation](../notes/installation.md) | 
+> [Table of contents](../contents.md) | [Previous: Installation](../notes/installation.md) | [Next - Project: Tic-Tec-Toe](./tic-tac-toe.md)
 
 Now we have a running project, we obviously do not understand every line of it but we can start learning React JS concepts as well as practice them. Thus, it is time to go to React official documents.
 
@@ -309,7 +309,69 @@ If you run this, you will find we have two buttons and both managing their state
 >
 > Code demonstrating useState hook `v3.7.0`
 
-## Summary / Importnat points
+## 8. Sharing data between components
+
+In previous example, both button have individual state as their state is maintained in MyButton component.
+
+![button-components](../images/docs/docs.md-buttons.png)
+
+Let's assume we want both button to show same count
+
+![button-components-expected](../images/docs/docs.md-buttons2.png)
+
+In above image, we moved state to the parent component MyApp. Doing so will allow use to pass the state to both MyButtons.
+
+```JSX
+import { useState } from 'react';
+
+export default function MyApp() {
+  const [count, setCount] = useState(0);
+
+  function handleClick() {
+    setCount(count + 1);
+  }
+
+  return (
+    <div>
+      <h1>Counters that update together</h1>
+      <MyButton count={count} onClick={handleClick} />
+      <MyButton count={count} onClick={handleClick} />
+    </div>
+  );
+}
+
+function MyButton({ count, onClick }) {
+  return (
+    <button onClick={onClick}>
+      Clicked {count} times
+    </button>
+  );
+}
+```
+
+Let's review this code.
+
+- We first move count state from MyButton to MyApp.
+- Now we need to pass that state to the MyButton. We do it by using `count={count}` as attribute in MyButton. This is called `props`.
+- Now if we click on the button, we have no stage in MyButton to manage. So we sent onClick event to the MyButton. The code is on MyButton in MyApp `onClick={handleClick}`.
+- Since we are passing count and onClick to MyButton, it will recieve it as parameter `MyButton({ count, onClick })`
+  - Once we have it, we can display count as {count} and call onclick as `<button onClick={onClick}>`
+
+> ### Version: `v3.8.0`
+>
+> Code demonstrating useState hook in parent component `v3.8.0`
+
+## Next steps
+
+Was it easy? Well we just covered the part of the react that we will be mostly using in most of the project.
+
+However, we have not yet covered 20%. that will be 80% ofreal project code but we are on nearly half-way mark to achieve that goal.
+
+Our next goal is to make a real project, where we will use what we learned till now. As per react docs, we are going to make a Tic-Tac-toe game.
+
+Let thefun begin.
+
+## Summary / Important points
 
 - Section 1: Creating and nesting components
   - React apps are made out of components.
@@ -367,9 +429,8 @@ return (
   - Events on browser are user actions like click, type, change (text, dropdown),select etc.
   - In react, we can handle event like `<button onClick={handleClick}>`.
     - Note: we are not calling the function by adding (). React will call it, when actual event happens.
-- Section 7: Uodating the screen
+- Section 7: Updating the screen
   - useState hook
-    - Any function that starts with `use` is a React hook.
     - `import { useState } from 'react';`
     - `const [count, setCount] = useState(0);`
       - `count` is the variable.
@@ -378,3 +439,22 @@ return (
     - `function handleClick() { setCount(count + 1); }`
     We can now use it as `<button onClick={handleClick}>`
     - When we set state and use component multiple times, each instance gets its own state, independent of other.
+  - Hooks
+    - Any function that starts with `use` are called Hooks.
+    - `useState` is one hook. We can find more in API reference - [https://react.dev/reference/react]().
+    - We can write custom hooks by combining the existing hooks.
+    - Hooks are more restrictive than other functions
+      - We can call hooks at the top of components or other hooks.
+      - If we want to use `useState` in a condition or a loop, extract a new component and put it there.
+- Section 8: Sharing data berween components.
+  - If we want a state to be shared between two components, move the state to the parent component.
+  - Parent component can send state as `props` and also could send a function to be called on an event.
+    - `<MyButton count={count} onClick={handleClick} />`
+  - Chile components will get it as function parameters
+    - `function MyButton({ count, onClick })`
+  - It can then use it as needed
+    - `<button onClick={onClick}>`
+    - `Clicked {count} times`
+
+> **Quick Links**: 
+> [Table of contents](../contents.md) | [Previous: Installation](../notes/installation.md) | [Next - Project: Tic-Tec-Toe](./tic-tac-toe.md)
